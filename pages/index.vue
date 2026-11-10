@@ -7,7 +7,7 @@
         <!-- Profile Card -->
         <div class="bg-offload-black rounded-3xl p-6 flex flex-col items-start row-span-2 md:row-span-5 md:col-span-3 relative border-[2px] border-[#3D3D3D59] shadow-lg">
           <div class="relative w-full">
-            <img src="~/assets/filippou-photo.png" alt="Profile" class="rounded-2xl w-full object-cover" style="max-height:30vh;" />
+            <img src="~/assets/filippou-photo.webp" alt="Profile" width="310" height="311" fetchpriority="high" decoding="async" class="rounded-2xl w-full object-cover" style="max-height:30vh;" />
             <div class="absolute -top-3 right-4 bg-gradient-to-b from-[#212121] to-[#101010] px-4 py-2 rounded-full">
               <span class="text-green-400 text-sm">● Open to work</span>
             </div>
