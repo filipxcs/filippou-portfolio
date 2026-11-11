@@ -40,6 +40,13 @@ module.exports = {
           text: 'rgb(var(--pf-text) / <alpha-value>)',
           muted: 'rgb(var(--pf-muted) / <alpha-value>)',
           accent: 'rgb(var(--pf-accent) / <alpha-value>)',
+          cta: 'rgb(var(--pf-cta) / <alpha-value>)',
+          'on-cta': 'rgb(var(--pf-on-cta) / <alpha-value>)',
+          hero: 'rgb(var(--pf-hero) / <alpha-value>)',
+          'hero-text': 'rgb(var(--pf-hero-text) / <alpha-value>)',
+          'hero-muted': 'rgb(var(--pf-hero-muted) / <alpha-value>)',
+          'hero-line': 'rgb(var(--pf-hero-line) / <alpha-value>)',
+          'hero-accent': 'rgb(var(--pf-hero-accent) / <alpha-value>)',
           live: 'rgb(var(--pf-live) / <alpha-value>)',
         },
         // Custom Colors

@@ -117,7 +117,7 @@
     font-family: 'Safiro2', system-ui, sans-serif;
   }
 }
-/* ---------- Portfolio v2 (bento) ---------- */
+/* ---------- Portfolio v3: paper + ink + cobalt (see DESIGN.md) ---------- */
 @font-face {
   font-family: 'Safiro Display';
   src: url('/fonts/safiro-semibold-webfont.woff2') format('woff2');
@@ -133,54 +133,198 @@
   font-display: swap;
 }
 
+/* Light (default): warm paper canvas, ink hero, one cobalt accent */
 :root {
-  --pf-bg: 18 20 24;        /* #121418 */
-  --pf-surface: 26 29 35;   /* #1A1D23 */
-  --pf-raised: 34 38 46;    /* #22262E */
-  --pf-line: 44 49 59;      /* #2C313B */
-  --pf-text: 237 238 240;   /* #EDEEF0 */
-  --pf-muted: 162 168 179;  /* #A2A8B3 */
-  --pf-accent: 244 183 64;  /* #F4B740 */
-  --pf-live: 74 222 128;    /* #4ADE80 */
+  color-scheme: light;
+  --pf-bg: 244 242 236;         /* #F4F2EC paper */
+  --pf-surface: 255 255 255;    /* #FFFFFF card */
+  --pf-raised: 236 233 225;     /* #ECE9E1 inner tile */
+  --pf-line: 221 217 206;       /* #DDD9CE hairline */
+  --pf-text: 27 26 23;          /* #1B1A17 ink */
+  --pf-muted: 94 91 83;         /* #5E5B53, 5.6:1 on raised */
+  --pf-accent: 51 85 255;       /* #3355FF cobalt: markers, links, focus */
+  --pf-cta: 51 85 255;          /* #3355FF filled CTA + contact card */
+  --pf-on-cta: 255 255 255;     /* 5.4:1 on cobalt */
+  --pf-hero: 27 26 23;          /* hero card = ink */
+  --pf-hero-text: 244 242 236;
+  --pf-hero-muted: 176 172 162; /* #B0ACA2, 7.6:1 on ink */
+  --pf-hero-line: 82 79 72;     /* #524F48 */
+  --pf-hero-accent: 122 145 255;/* #7A91FF, 6:1 on ink */
+  --pf-live: 22 163 74;         /* #16A34A open-to-work dot */
 }
+
+/* Dark: same system inverted; the hero becomes the paper card */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --pf-bg: 14 14 16;          /* #0E0E10 */
+    --pf-surface: 23 23 26;     /* #17171A */
+    --pf-raised: 32 32 36;      /* #202024 */
+    --pf-line: 46 46 52;        /* #2E2E34 */
+    --pf-text: 242 240 234;     /* #F2F0EA */
+    --pf-muted: 163 160 154;    /* #A3A09A, 5.8:1 on raised */
+    --pf-accent: 120 144 255;   /* #7890FF, 6:1 on surface */
+    --pf-hero: 242 240 234;
+    --pf-hero-text: 27 26 23;
+    --pf-hero-muted: 94 91 83;
+    --pf-hero-line: 176 172 162;
+    --pf-hero-accent: 51 85 255;  /* 4.7:1 on paper */
+    --pf-live: 74 222 128;
+  }
+}
+
+html, body { background: rgb(var(--pf-bg)); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+::selection { background: rgb(var(--pf-cta)); color: rgb(var(--pf-on-cta)); }
 
 @layer components {
   .pf-card {
-    @apply relative min-w-0 rounded-card border border-pf-line bg-pf-surface;
+    @apply relative isolate min-w-0 overflow-hidden rounded-card border border-pf-line bg-pf-surface;
     padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+    transition: border-color 0.3s ease;
+  }
+  /* Pointer spotlight: pages/index.vue sets --mx/--my while hovering */
+  .pf-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(28rem circle at var(--mx, 50%) var(--my, 50%), rgb(var(--pf-accent) / 0.1), transparent 60%);
+  }
+  .pf-card-hero {
+    @apply border-transparent bg-pf-hero text-pf-hero-text;
+  }
+  .pf-card-hero::before {
+    background: radial-gradient(34rem circle at var(--mx, 50%) var(--my, 50%), rgb(var(--pf-cta) / 0.3), transparent 60%);
+  }
+  .pf-card-cta {
+    @apply border-transparent bg-pf-cta text-pf-on-cta;
+  }
+  .pf-card-cta::before {
+    background: radial-gradient(28rem circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.18), transparent 60%);
   }
   .pf-title {
-    @apply font-display font-semibold text-pf-text;
+    @apply font-display font-semibold;
     font-size: 1.375rem;
     line-height: 1.15;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
   .pf-chip {
     @apply inline-flex items-center rounded-full border border-pf-line bg-pf-raised px-3 py-1 text-[0.8125rem] leading-5 text-pf-text;
+    transition: border-color 0.2s ease;
   }
   .pf-focus {
     @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[0.1875rem] focus-visible:outline-pf-accent;
   }
+  .pf-focus-light {
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[0.1875rem] focus-visible:outline-white;
+  }
   .pf-btn {
-    @apply pf-focus inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-5 text-[0.9375rem] font-semibold transition-colors duration-150;
+    @apply pf-focus relative inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-5 text-[0.9375rem] font-semibold;
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
   }
+  .pf-btn:active { transform: scale(0.97); }
+  .pf-btn-icon { transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1); }
   .pf-btn-primary {
-    @apply pf-btn bg-pf-accent text-pf-bg hover:bg-[#FFCB63];
+    @apply pf-btn bg-pf-cta text-pf-on-cta;
   }
+  .pf-btn-primary:hover { background: rgb(var(--pf-cta) / 0.85); }
   .pf-btn-ghost {
-    @apply pf-btn border border-pf-line bg-pf-raised text-pf-text hover:border-pf-muted;
+    @apply pf-btn border border-pf-line bg-pf-surface text-pf-text hover:border-pf-text;
   }
-  .pf-reveal {
-    animation: pf-rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-    animation-delay: calc(var(--i, 0) * 60ms);
+  .pf-btn-hero {
+    @apply pf-btn border border-pf-hero-line text-pf-hero-text hover:border-pf-hero-text;
   }
+  .pf-btn-oncta {
+    @apply pf-btn pf-focus-light border border-white/40 text-white hover:border-white hover:bg-white/10;
+  }
+  .pf-link {
+    @apply underline decoration-pf-line decoration-1 underline-offset-4;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .pf-link:hover { text-decoration-color: rgb(var(--pf-accent)); }
 }
 
+@media (hover: hover) {
+  .pf-card:hover::before { opacity: 1; }
+  .pf-card:not(.pf-card-hero):not(.pf-card-cta):hover { border-color: rgb(var(--pf-accent) / 0.4); }
+  .pf-chip:hover { border-color: rgb(var(--pf-accent) / 0.6); }
+}
+
+/* ---------- Motion (all of it is off under prefers-reduced-motion) ---------- */
 @keyframes pf-rise {
-  from { opacity: 0; transform: translateY(0.75rem); }
+  from { opacity: 0; transform: translateY(1.5rem) scale(0.98); }
   to { opacity: 1; transform: none; }
 }
+@keyframes pf-line {
+  from { transform: translateY(110%); }
+  to { transform: none; }
+}
+@keyframes pf-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pf-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes pf-float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-4%, 6%, 0) scale(1.08); }
+}
 
+.pf-mask { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+.pf-mask > span { display: block; }
+.pf-progress { transform-origin: 0 50%; transform: scaleX(0); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* 1. Page load: top cards rise in sequence, headline lines slide up out of a mask */
+  .pf-intro {
+    animation: pf-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 100ms);
+  }
+  .pf-mask > span {
+    animation: pf-line 1s cubic-bezier(0.2, 0.75, 0.15, 1) both;
+    animation-delay: calc(200ms + var(--l, 0) * 120ms);
+  }
+  .pf-intro-late { animation: pf-fade 0.9s ease both 0.6s; }
+  .pf-orb { animation: pf-float 12s ease-in-out infinite; }
+
+  /* 2. Scroll: cards and tiles reveal as they enter the viewport (CSS scroll timelines, no JS) */
+  @supports (animation-timeline: view()) {
+    .pf-scroll {
+      animation: pf-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 12rem;
+    }
+    .pf-progress {
+      animation: pf-grow linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+  /* Browsers without scroll timelines get a one-time staggered reveal instead */
+  @supports not (animation-timeline: view()) {
+    .pf-scroll {
+      animation: pf-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      animation-delay: calc(300ms + var(--i, 0) * 80ms);
+    }
+  }
+
+  /* 3. Hover details */
+  .pf-shot { transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .group:hover .pf-shot { transform: scale(1.05); }
+  .pf-btn:hover .pf-btn-icon { transform: translateY(0.125rem); }
+  .pf-btn:hover .pf-btn-icon-x, .group:hover .pf-btn-icon-x { transform: translate(0.125rem, -0.125rem); }
+}
+
+@supports not (animation-timeline: scroll()) {
+  .pf-progress { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .pf-reveal { animation: none; }
+  .pf-progress { display: none; }
 }
