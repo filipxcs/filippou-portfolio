@@ -1,5 +1,14 @@
-import { defineOrganization  } from 'nuxt-schema-org/schema';
 import tailwindTypography from '@tailwindcss/typography';
+
+// Production domain of the portfolio. Override with NUXT_PUBLIC_SITE_URL (build or runtime env),
+// e.g. when a custom domain is added to the Cloudflare Pages project.
+const siteUrl = (process.env.NUXT_PUBLIC_SITE_URL || 'https://filippou-portfolio.pages.dev').replace(/\/+$/, '')
+const siteName = 'Petros Filippou'
+const siteTitle = 'Petros Filippou | Full Stack Developer'
+const siteDescription =
+  'Petros Filippou, Full Stack Developer in Thessaloniki. Websites and e-commerce with Vue.js, Nuxt, WordPress and OpenCart, plus solar park SCADA integration.'
+const ogImage = `${siteUrl}/og-image.png`
+
 export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@nuxtjs/fontaine', '@nuxt/image', '@nuxtjs/seo', '@nuxthub/core', '@nuxt/icon', 'nuxt-delay-hydration', '@dargmuesli/nuxt-cookie-control', 'nuxt-booster'],
   tailwindcss: {
@@ -14,8 +23,11 @@ export default defineNuxtConfig({
     preset: 'cloudflare-pages',
 
   },
-  site: { 
-    url: 'https://offload.studio', 
+  site: {
+    url: siteUrl,
+    name: siteName,
+    description: siteDescription,
+    defaultLocale: 'en',
   },
 
   app: {
@@ -24,7 +36,27 @@ export default defineNuxtConfig({
       name: 'fade',
       mode: 'out-in' // default
     },
-    
+    // Site-wide SEO defaults. nuxt-seo-utils 6.0.x only applies these from app.seoMeta
+    // (a `seo.meta` block is silently ignored). og:image/twitter:image + size come from
+    // public/og-image.png, which nuxt-seo-utils detects automatically; pages/index.vue sets the absolute URLs.
+    seoMeta: {
+      description: siteDescription,
+      themeColor: [
+        { content: '#0E0E10', media: '(prefers-color-scheme: dark)' },
+        { content: '#F4F2EC', media: '(prefers-color-scheme: light)' },
+      ],
+      author: siteName,
+      colorScheme: 'light dark',
+      applicationName: siteName,
+      ogSiteName: siteName,
+      ogLocale: 'en_US',
+      ogType: 'website',
+      ogTitle: siteTitle,
+      ogDescription: siteDescription,
+      ogImageAlt: 'Petros Filippou, Full Stack Developer',
+      twitterCard: 'summary_large_image',
+      robots: 'index, follow',
+    },
   },
 
   ssr: true,
@@ -44,47 +76,28 @@ export default defineNuxtConfig({
     }
   },
 
-  seo: {
-    meta: {
-      title:"Offload Studio | Design & Web Development Agency",
-      description: 'Offload Studio is a creative design and web development agency specializing in branding, logos, posters, and custom websites. We craft tailored solutions to help businesses stand out and succeed in the digital world. Let us turn your ideas into reality!',
-      themeColor: [
-        { content: '#18181b', media: '(prefers-color-scheme: dark)' },
-        { content: 'white', media: '(prefers-color-scheme: light)' },
-      ],
-      author: 'Filippou/Afentakis',
-      colorScheme: 'dark light',
-      applicationName: 'Offload.studio',
-      // Nuxt SEO Utils already sets the below tags for you
-      ogSiteName: 'Offload Studio | Design & Web Development Agency',
-      ogLocale: 'en_US',
-      ogType: 'website',
-      ogUrl: 'https://offload.studio',
-      ogImage: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg',
-      ogTitle: 'Offload Studio | Design & Web Development Agency',
-      ogDescription: 'Offload Studio provides innovative solutions in branding, design, and web development. From custom logos to complete websites, we help businesses thrive online.',
-      titleTemplate: '%s | Design & Web Development Agency',
-      // Other Nuxt SEO modules handles these
-      // ogImage: 'https://example.com/my-og-image.png',
-      robots: 'index, follow',
-    }
-  },
-
   schemaOrg: {
-    identity: defineOrganization({
-      // Basic Information
-      name: 'Offload Studio',
-      logo: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg',
-      description: 'Offload Studio provides innovative solutions in branding, design, and web development. From custom logos to complete websites, we help businesses thrive online.',
-      url: 'https://offload.studio',
-      email: 'info@offload.studio',
-      foundingDate: '2015-03-25',
-      numberOfEmployees: {
-        '@type': 'QuantitativeValue',
-        'minValue': 1,
-        'maxValue': 10
+    // Plain object with `type` (not definePerson()): the helper's resolver is lost when the
+    // config is serialised into runtime config, and no identity node is rendered.
+    identity: {
+      type: 'Person',
+      name: siteName,
+      jobTitle: 'Full Stack Developer',
+      description: siteDescription,
+      url: siteUrl,
+      image: ogImage,
+      email: 'filippou.petros.dev@gmail.com',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Thessaloniki',
+        addressCountry: 'GR',
       },
-    })
+      knowsAbout: ['Vue.js', 'Nuxt', 'WordPress', 'OpenCart', 'Moodle LMS', 'SCADA integration'],
+      sameAs: [
+        'https://github.com/filipxcs',
+        'https://www.linkedin.com/in/petros-filippou-55993b228/',
+      ],
+    },
   },
 
   robots: {

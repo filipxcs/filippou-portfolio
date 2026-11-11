@@ -356,6 +356,11 @@ const projects = [
 const description =
   'Petros Filippou, Full Stack Developer in Thessaloniki. Websites and e-commerce with Vue.js, Nuxt, WordPress and OpenCart, plus solar park SCADA integration.'
 
+// Absolute URLs come from the site config (site.url / NUXT_PUBLIC_SITE_URL), never hardcoded.
+const site = useSiteConfig()
+const siteUrl = site.url.replace(/\/+$/, '')
+const ogImage = `${siteUrl}/og-image.png`
+
 useHead({
   htmlAttrs: { lang: 'en' },
   title: 'Petros Filippou | Full Stack Developer',
@@ -366,12 +371,12 @@ useHead({
     { name: 'color-scheme', content: 'light dark' },
     { property: 'og:title', content: 'Petros Filippou | Full Stack Developer' },
     { property: 'og:description', content: description },
-    { property: 'og:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' },
-    { property: 'og:url', content: 'https://offload.studio/' },
+    { property: 'og:image', content: ogImage },
+    { property: 'og:url', content: `${siteUrl}/` },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:title', content: 'Petros Filippou | Full Stack Developer' },
     { name: 'twitter:description', content: description },
-    { name: 'twitter:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' },
+    { name: 'twitter:image', content: ogImage },
   ],
 })
 </script>

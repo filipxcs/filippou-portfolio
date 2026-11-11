@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Source for public/og-image.png. Regenerate with: bun scripts/build-og-image.mjs -->
+  <rect width="1200" height="630" fill="#F4F2EC"/>
+  <rect x="48" y="48" width="1104" height="534" rx="36" fill="#ECE9E1"/>
+  <rect x="104" y="420" width="72" height="6" rx="3" fill="#3355FF"/>
+  <circle cx="148" cy="148" r="44" fill="#1B1A17"/>
+  <text x="148" y="163" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700" fill="#F4F2EC">PF</text>
+  <text x="104" y="320" font-family="Segoe UI, Arial, sans-serif" font-size="92" font-weight="700" fill="#1B1A17" letter-spacing="-2">Petros Filippou</text>
+  <text x="104" y="392" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="600" fill="#3355FF">Full Stack Developer</text>
+  <text x="104" y="480" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="#5E5B53">Vue.js · Nuxt · WordPress · OpenCart · Solar park SCADA</text>
+  <text x="104" y="526" font-family="Segoe UI, Arial, sans-serif" font-size="26" fill="#5E5B53">Thessaloniki, Greece</text>
+</svg>
