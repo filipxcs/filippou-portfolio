@@ -359,6 +359,7 @@ const description =
 useHead({
   htmlAttrs: { lang: 'en' },
   title: 'Petros Filippou | Full Stack Developer',
+  titleTemplate: '%s',
   meta: [
     { name: 'description', content: description },
     { name: 'robots', content: 'index, follow' },
