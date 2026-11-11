@@ -26,8 +26,22 @@ module.exports = {
         bulevar: ['Bulevar', 'sans-serif'],
         caveat: ['Caveat', 'cursive'],
         roboto: ['Roboto', 'roboto'],
+        // Portfolio v2: display + body pair
+        display: ['Safiro Display', 'Safiro', 'system-ui', 'sans-serif'],
+        body: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
       },
       colors: {
+        // Portfolio v2 tokens (see DESIGN.md)
+        pf: {
+          bg: 'rgb(var(--pf-bg) / <alpha-value>)',
+          surface: 'rgb(var(--pf-surface) / <alpha-value>)',
+          raised: 'rgb(var(--pf-raised) / <alpha-value>)',
+          line: 'rgb(var(--pf-line) / <alpha-value>)',
+          text: 'rgb(var(--pf-text) / <alpha-value>)',
+          muted: 'rgb(var(--pf-muted) / <alpha-value>)',
+          accent: 'rgb(var(--pf-accent) / <alpha-value>)',
+          live: 'rgb(var(--pf-live) / <alpha-value>)',
+        },
         // Custom Colors
         'offload-black': '#181818', // Custom gray color
         'offload-yellow': '#FFE500', // Custom gray color
@@ -73,6 +87,8 @@ module.exports = {
         },
       },
       borderRadius: {
+        card: '1.75rem',
+        tile: '1.125rem',
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

@@ -117,3 +117,70 @@
     font-family: 'Safiro2', system-ui, sans-serif;
   }
 }
+/* ---------- Portfolio v2 (bento) ---------- */
+@font-face {
+  font-family: 'Safiro Display';
+  src: url('/fonts/safiro-semibold-webfont.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Safiro Display';
+  src: url('/fonts/safiro-bold-webfont.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --pf-bg: 18 20 24;        /* #121418 */
+  --pf-surface: 26 29 35;   /* #1A1D23 */
+  --pf-raised: 34 38 46;    /* #22262E */
+  --pf-line: 44 49 59;      /* #2C313B */
+  --pf-text: 237 238 240;   /* #EDEEF0 */
+  --pf-muted: 162 168 179;  /* #A2A8B3 */
+  --pf-accent: 244 183 64;  /* #F4B740 */
+  --pf-live: 74 222 128;    /* #4ADE80 */
+}
+
+@layer components {
+  .pf-card {
+    @apply relative min-w-0 rounded-card border border-pf-line bg-pf-surface;
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  }
+  .pf-title {
+    @apply font-display font-semibold text-pf-text;
+    font-size: 1.375rem;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .pf-chip {
+    @apply inline-flex items-center rounded-full border border-pf-line bg-pf-raised px-3 py-1 text-[0.8125rem] leading-5 text-pf-text;
+  }
+  .pf-focus {
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[0.1875rem] focus-visible:outline-pf-accent;
+  }
+  .pf-btn {
+    @apply pf-focus inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-full px-5 text-[0.9375rem] font-semibold transition-colors duration-150;
+  }
+  .pf-btn-primary {
+    @apply pf-btn bg-pf-accent text-pf-bg hover:bg-[#FFCB63];
+  }
+  .pf-btn-ghost {
+    @apply pf-btn border border-pf-line bg-pf-raised text-pf-text hover:border-pf-muted;
+  }
+  .pf-reveal {
+    animation: pf-rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+}
+
+@keyframes pf-rise {
+  from { opacity: 0; transform: translateY(0.75rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-reveal { animation: none; }
+}

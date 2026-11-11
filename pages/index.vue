@@ -1,226 +1,344 @@
 <template>
-  <div class="bg-[#0D0D0D] text-white min-h-screen flex items-center justify-center">
-    <div class="container mx-auto md:overflow-hidden">
-      <div
-        class="grid grid-cols-1 md:grid-cols-12 grid-rows-6 md:grid-rows-4 gap-3 p-5"
-      >
-        <!-- Profile Card -->
-        <div class="bg-offload-black rounded-3xl p-6 flex flex-col items-start row-span-2 md:row-span-5 md:col-span-3 relative border-[2px] border-[#3D3D3D59] shadow-lg">
-          <div class="relative w-full">
-            <img src="~/assets/filippou-photo.png" alt="Profile" class="rounded-2xl w-full object-cover" style="max-height:30vh;" />
-            <div class="absolute -top-3 right-4 bg-gradient-to-b from-[#212121] to-[#101010] px-4 py-2 rounded-full">
-              <span class="text-green-400 text-sm">● Open to work</span>
+  <div class="min-h-dvh bg-pf-bg font-body text-pf-text antialiased">
+    <a
+      href="#main"
+      class="pf-focus sr-only rounded-full bg-pf-accent px-4 py-2 font-semibold text-pf-bg focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50"
+    >Skip to content</a>
+
+    <header class="mx-auto flex w-[min(100%_-_2rem,80rem)] items-center justify-between gap-4 py-4 md:py-6">
+      <a href="/" class="pf-focus inline-flex min-h-[2.75rem] items-center rounded-full font-display text-[1.0625rem] font-semibold tracking-tight">
+        Petros Filippou
+      </a>
+      <nav aria-label="Profiles" class="flex items-center gap-1">
+        <a
+          v-for="link in profile.links"
+          :key="link.href"
+          :href="link.href"
+          target="_blank"
+          rel="noopener"
+          class="pf-focus inline-flex size-11 items-center justify-center rounded-full text-pf-muted transition-colors hover:bg-pf-raised hover:text-pf-text"
+        >
+          <component :is="iconFor(link.icon)" class="size-5" aria-hidden="true" />
+          <span class="sr-only">{{ link.label }} (opens in a new tab)</span>
+        </a>
+        <a :href="profile.cv" download class="pf-btn-ghost ml-1 hidden sm:inline-flex">
+          <Download class="size-4" aria-hidden="true" />
+          CV
+        </a>
+      </nav>
+    </header>
+
+    <main id="main" class="mx-auto w-[min(100%_-_2rem,80rem)] pb-12">
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-6 md:gap-4 lg:grid-cols-12">
+        <!-- Hero -->
+        <section
+          aria-labelledby="hero-title"
+          class="pf-card pf-reveal flex flex-col justify-between gap-8 bg-pf-raised md:col-span-6 lg:col-span-8"
+          style="--i: 0"
+        >
+          <div class="flex items-center gap-4">
+            <img
+              src="~/assets/petros.webp"
+              alt="Petros Filippou"
+              width="310"
+              height="311"
+              fetchpriority="high"
+              class="size-16 rounded-full border border-pf-line object-cover md:size-20"
+            />
+            <div class="min-w-0">
+              <p class="font-semibold">{{ profile.title }}</p>
+              <p class="text-[0.9375rem] text-pf-muted">{{ profile.location }}</p>
             </div>
           </div>
-          <h2 class="text-2xl font-bold mt-4">Petros Filippou</h2>
-          <p class="text-zinc-400 text-md mb-4">Full Stack Developer</p>
-          <p class="text-zinc-300 text-left text-lg flex-1">
-            I care about building things that feel right, clean code, thoughtful design, and websites that load fast and make people smile. Let's make something simple and solid together.
+
+          <div>
+            <h1
+              id="hero-title"
+              class="font-display font-bold leading-[0.95] tracking-[-0.03em]"
+              style="font-size: clamp(2.75rem, 1.6rem + 5vw, 4.75rem)"
+            >
+              Websites for businesses.<br class="hidden sm:inline" />
+              Logic for solar parks.
+            </h1>
+            <p class="mt-5 max-w-[60ch] text-[1.0625rem] leading-relaxed text-pf-muted">
+              {{ profile.summary }}
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <a :href="`mailto:${profile.email}`" class="pf-btn-primary">
+              <Mail class="size-4" aria-hidden="true" />
+              Email me
+            </a>
+            <a :href="profile.cv" download class="pf-btn-ghost">
+              <Download class="size-4" aria-hidden="true" />
+              Download CV
+              <span class="sr-only">(PDF)</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- Now -->
+        <section
+          aria-labelledby="now-title"
+          class="pf-card pf-reveal flex flex-col gap-5 md:col-span-6 lg:col-span-4"
+          style="--i: 1"
+        >
+          <p class="inline-flex items-center gap-2 self-start rounded-full border border-pf-line px-3 py-1 text-[0.8125rem]">
+            <span class="relative flex size-2">
+              <span class="absolute inline-flex size-full rounded-full bg-pf-live opacity-60 motion-safe:animate-ping" />
+              <span class="relative inline-flex size-2 rounded-full bg-pf-live" />
+            </span>
+            {{ profile.availability }}
           </p>
-        </div>
+          <div>
+            <h2 id="now-title" class="pf-title">Now: {{ currentRole.role }}</h2>
+            <p class="mt-1 text-[0.9375rem] text-pf-muted">
+              {{ currentRole.company }}, {{ currentRole.place }}. {{ currentRole.period }}
+            </p>
+          </div>
+          <ul class="space-y-2 text-[0.9375rem] leading-relaxed">
+            <li v-for="p in currentRole.points" :key="p" class="flex gap-3">
+              <span class="mt-[0.6em] size-1.5 shrink-0 rounded-full bg-pf-accent" aria-hidden="true" />
+              <span>{{ p }}</span>
+            </li>
+          </ul>
+          <ul class="mt-auto flex flex-wrap gap-2" aria-label="Tools in this role">
+            <li v-for="t in currentRole.tags" :key="t" class="pf-chip">{{ t }}</li>
+          </ul>
+        </section>
 
-        <!-- Contact Card (Contact Info + Form, one column, wider and shorter) -->
-        <div class="bg-offload-black rounded-3xl p-2 flex flex-col justify-between row-span-2 md:row-span-2 col-span-1 md:col-span-6 border-orange-500 border-[2px] shadow-lg">
-          <div class="grid grid-cols-1 md:grid-cols-1 gap-6 h-full">
-            <!-- Left Column - Contact Info -->
-            <div class="flex flex-col gap-4 px-3 h-full">
-              <p class="text-2xl text-[#A3A3A3] mt-10">Contact</p>
-              <h1 class="text-white text-4xl font-bold">Let's talk!</h1>
-            </div>
-            <!-- Right Column - Contact Form -->
-            <form class="flex flex-col gap-3 bg-offload-black px-4 py-3 rounded-2xl border border-[#3D3D3D59]">
-              <h3 class="text-xl text-white mb-1">Do you prefer I reach out?</h3>
-              <input class="bg-zinc-800 rounded-xl p-3" placeholder="Your Email" />
-              <textarea class="bg-zinc-800 rounded-xl p-3" placeholder="Your Message" rows="4"></textarea>
-              <button class="bg-offload-pink hover:bg-pink-600 rounded-xl p-3 font-medium">Send Message</button>
-            </form>
-          </div>
-        </div>
-        <!-- Social Profiles (right of contact card) -->
-        <div class="bg-offload-black rounded-3xl p-3 flex flex-col justify-center md:row-span-1 md:col-span-3 border-[2px] border-[#3D3D3D59] shadow-lg">
-          <h3 class="font-bold mb-2 text-center">Social Profiles</h3>
-          <div class="flex gap-4 text-3xl justify-center items-center">
-            <a href="https://github.com/filipxcs" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="GitHub">
-              <Icon name="mdi:github" class="w-10 h-10" />
-            </a>
-            <a href="https://www.linkedin.com/in/petros-filippou-55993b228/" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="LinkedIn">
-              <Icon name="mdi:linkedin" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="Twitter">
-              <Icon name="mdi:twitter" class="w-10 h-10" />
-            </a>
-          </div>
-        </div>
-        <!-- Offload Studio Link (under social profiles) -->
-        <div class="bg-offload-black rounded-3xl p-3 flex flex-col justify-start  row-span-1 md:row-span-1 md:col-span-3 h-full border-[0.2dvh] border-[#3D3D3D59] shadow-lg">
-              <span class="text-zinc-400 text-xs">Co-Founder @ Offload Studio</span>
-          <a href="https://offload.studio" target="_blank" class="block mt-2 text-lg font-bold text-pink-500 hover:underline">Visit <span class="text-orange-400">Offload Studio</span></a>
-          <p class="text-sm mt-4">We’re a small creative agency building modern websites and bold visual identities.
-          From clean WordPress sites to custom branding, we combine design and development to help businesses stand out online.</p>
-        </div>
-        <!-- My Journey -->
-        <div class="bg-offload-black rounded-3xl p-3 row-span-2 md:row-span-5 md:col-span-3 h-full border-[2px] border-[#3D3D3D59] shadow-lg flex flex-col">
-          <h2 class="font-bold text-2xl mb-4 bg-[#212121] px-5 py-6 rounded-3xl shadow-lg border border-[#3D3D3D59]">My Journey</h2>
-          <div class="flex flex-col flex-1 justify-end gap-4">
-            <Card class="flex-1 bg-[#212121] rounded-3xl px-4 py-2 border border-[#3D3D3D59] shadow-lg">
-              <div class="flex items-center justify-between">
-                <div class="font-bold text-white">Offload Studio</div>
-                <Badge class="ml-2 bg-offload-black font-medium">2025-Current</Badge>
+        <!-- Projects -->
+        <section
+          aria-labelledby="work-title"
+          class="pf-card pf-reveal md:col-span-6 lg:col-span-12"
+          style="--i: 2"
+        >
+          <h2 id="work-title" class="pf-title">Selected websites</h2>
+          <ul class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <li
+              v-for="project in projects"
+              :key="project.name"
+              class="group flex min-w-0 flex-col overflow-hidden rounded-tile border border-pf-line bg-pf-raised"
+            >
+              <img
+                :src="project.image"
+                :alt="`Screenshot of the ${project.name} website`"
+                width="960"
+                height="600"
+                loading="lazy"
+                decoding="async"
+                class="aspect-[16/10] w-full object-cover object-top"
+              />
+              <div class="flex flex-1 flex-col gap-3 p-4">
+                <div>
+                  <h3 class="font-display text-[1.0625rem] font-semibold">{{ project.name }}</h3>
+                  <p class="mt-1 text-[0.9375rem] leading-relaxed text-pf-muted">{{ project.description }}</p>
+                </div>
+                <ul class="flex flex-wrap gap-1.5" :aria-label="`${project.name} stack`">
+                  <li v-for="s in project.stack" :key="s" class="rounded-full bg-pf-surface px-2.5 py-0.5 text-[0.8125rem] text-pf-muted">{{ s }}</li>
+                </ul>
+                <a
+                  v-if="project.href"
+                  :href="project.href"
+                  target="_blank"
+                  rel="noopener"
+                  class="pf-focus mt-auto inline-flex min-h-[2.75rem] items-center gap-1.5 self-start rounded-full text-[0.9375rem] font-semibold text-pf-text underline decoration-pf-line underline-offset-4 hover:decoration-pf-accent"
+                >
+                  Visit {{ project.name }}
+                  <ArrowUpRight class="size-4" aria-hidden="true" />
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+                <p v-else class="mt-auto text-[0.8125rem] text-pf-muted">{{ project.note }}</p>
               </div>
-              <div class="text-zinc-400 text-sm mb-1">Co-Founder</div>
-              <div class="text-zinc-300 text-xs"> Started a creative web development and design agency with a close 
-                collaborator focused on building modern, responsive websites, branding, and 
-                visual design.</div>
-            </Card>
-            <Card class="flex-1 bg-[#212121] rounded-3xl px-4 py-2 border border-[#3D3D3D59] shadow-lg">
-              <div class="flex items-center justify-between">
-                <div class="font-bold text-white">Freelance</div>
-                <Badge class="ml-2 bg-offload-black font-medium">2019-Current</Badge>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Experience -->
+        <section
+          aria-labelledby="exp-title"
+          class="pf-card pf-reveal md:col-span-6 lg:col-span-7"
+          style="--i: 3"
+        >
+          <h2 id="exp-title" class="pf-title">Web work since 2019</h2>
+          <ol class="mt-6 space-y-6 border-l border-pf-line pl-5">
+            <li v-for="job in experience" :key="job.company" class="relative">
+              <span class="absolute -left-[1.5625rem] top-[0.4rem] size-2 rounded-full border border-pf-muted bg-pf-surface" aria-hidden="true" />
+              <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <h3 class="font-display text-[1.0625rem] font-semibold">{{ job.role }}</h3>
+                <span class="text-[0.8125rem] text-pf-muted">{{ job.period }}</span>
               </div>
-              <div class="text-zinc-400 text-sm mb-1">Full Stack Developer</div>
-              <li class="text-sm text-zinc-300">Developed custom websites using WordPress, OpenCart, and Vue.js for small businesses.</li>
-               <li class="text-sm text-zinc-300">Created and maintained FiveM scripts with Lua and JavaScript, including UIs and server-side logic.</li>
-            </Card>
-            <Card class="flex-1 bg-[#212121] rounded-3xl px-4 py-2 border border-[#3D3D3D59] shadow-lg">
-              <div class="flex items-center justify-between">
-                <div class="font-bold text-white">CC-Lit</div>
-                <Badge class="ml-2 bg-offload-black font-medium">2021-2024</Badge>
-              </div>
-              <div class="text-zinc-400 text-sm mb-1">Lead Developer/Full Stack Developer </div>
-              <ul class="list-disc list-inside">
-                <li class="text-sm text-zinc-300">Developed and deployed 7 full websites using WordPress and OpenCart, tailored to client-specific requirements.</li>
-                <li class="text-sm text-zinc-300">Built multiple custom OpenCart extensions to enhance e-commerce functionality and automate business operations.</li>
+              <p class="text-[0.9375rem] text-pf-muted">
+                <a
+                  v-if="job.href"
+                  :href="job.href"
+                  target="_blank"
+                  rel="noopener"
+                  class="pf-focus rounded text-pf-text underline decoration-pf-line underline-offset-4 hover:decoration-pf-accent"
+                >{{ job.company }}<span class="sr-only"> (opens in a new tab)</span></a>
+                <template v-else>{{ job.company }}</template>
+                <template v-if="job.place">, {{ job.place }}</template>
+              </p>
+              <ul class="mt-2 space-y-1.5 text-[0.9375rem] leading-relaxed">
+                <li v-for="p in job.points" :key="p">{{ p }}</li>
               </ul>
-            </Card>
+            </li>
+          </ol>
+        </section>
 
+        <!-- Skills -->
+        <section
+          aria-labelledby="skills-title"
+          class="pf-card pf-reveal md:col-span-6 lg:col-span-5"
+          style="--i: 4"
+        >
+          <h2 id="skills-title" class="pf-title">Skills</h2>
+          <dl class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+            <div v-for="g in skills" :key="g.group" class="min-w-0">
+              <dt class="text-[0.9375rem] text-pf-muted">{{ g.group }}</dt>
+              <dd class="mt-2 flex flex-wrap gap-1.5">
+                <span v-for="s in g.items" :key="s" class="pf-chip">{{ s }}</span>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- Education -->
+        <section
+          aria-labelledby="edu-title"
+          class="pf-card pf-reveal flex flex-col gap-5 md:col-span-6 lg:col-span-4"
+          style="--i: 5"
+        >
+          <div>
+            <h2 id="edu-title" class="pf-title">Education</h2>
+            <p class="mt-4 font-semibold">{{ education.title }}</p>
+            <p class="text-[0.9375rem] text-pf-muted">{{ education.school }}, {{ education.place }}</p>
+            <p class="mt-1 text-[0.9375rem] text-pf-muted">{{ education.detail }}</p>
           </div>
-        </div>     
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 col-span-1 md:col-span-6 row-span-2 md:row-span-5 h-full border-[2px] border-[#3D3D3D59] shadow-lg rounded-3xl bg-offload-black p-3">           
-          <!-- Project 1 -->           
-          <div class="flex flex-col justify-between p-6 rounded-3xl bg-gradient-to-tr from-blue-400/80 via-blue-500/70 to-blue-700/80 shadow-lg">             
-            <div>               
-              <h3 class="text-2xl font-bold mb-2">Offload Studio</h3>               
-              <p class="text-zinc-200 mb-3">A modern e-commerce platform for fresh fish delivery, featuring real-time inventory and seamless checkout.</p>
-              
-              <!-- Technology badges -->
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Vuejs</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Nuxtjs</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Tailwind</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Shadcn-ui</span>
-              </div>
-            </div>               
-            <a href="https://offload.studio/">                
-              <Button class="mt-2 bg-offload-black hover:bg-pink-600 text-white font-medium text-sm py-1.5 px-3 rounded-lg transition shadow-sm">Visit Website</Button>             
-            </a>           
-          </div>            
-
-          <!-- Project 2 -->           
-          <div class="flex flex-col justify-between p-6 rounded-3xl bg-gradient-to-tr from-lime-700/80 via-green-600/70 to-yellow-200/60 shadow-lg">             
-            <div>               
-              <h3 class="text-2xl font-bold mb-2">Karemfillis Olives</h3>               
-              <p class="text-zinc-200 mb-3">Brand and website for a premium olive oil producer, with a focus on storytelling and product showcase.</p>
-              
-              <!-- Technology badges -->
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">WordPress</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">PHP</span>
-              </div>
-            </div>             
-            <a href="https://karemfillisolives.com/">                
-              <Button class="mt-2 bg-offload-black hover:bg-pink-600 text-white font-medium text-sm py-1.5 px-3 rounded-lg transition shadow-sm">Visit Website</Button>             
-            </a>           
-          </div>            
-
-          <!-- Project 3 -->           
-          <div class="flex flex-col justify-between p-6 rounded-3xl bg-gradient-to-tr from-green-400/70 via-emerald-500/50 to-black shadow-lg">             
-            <div>               
-              <h3 class="text-2xl font-bold mb-2">NetConnect</h3>               
-              <p class="text-zinc-200 mb-3">Corporate site for a networking solutions provider, with custom service pages and contact flows.</p>
-              
-              <!-- Technology badges -->
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Opencart</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">PHP</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Javascript</span>
-              </div>
-            </div>              
-            <a href="https://www.netconnect.gr/">                
-              <Button class="mt-2 bg-offload-black hover:bg-pink-600 text-white font-medium text-sm py-1.5 px-3 rounded-lg transition shadow-sm">Visit Website</Button>             
-            </a>           
-          </div>            
-
-          <!-- Project 4 -->           
-          <div class="flex flex-col justify-between p-6 rounded-3xl bg-gradient-to-tr from-orange-400/70 via-yellow-300/50 to-black shadow-lg">             
-            <div>               
-              <h3 class="text-2xl font-bold mb-2">PCShop</h3>               
-              <p class="text-zinc-200 mb-3">E-commerce for a local computer shop, with product catalog, online ordering, and admin dashboard.</p>
-              
-              <!-- Technology badges -->
-              <div class="flex flex-wrap gap-1.5 mb-4">
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Opencart</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">PHP</span>
-                <span class="text-xs bg-white/20 backdrop-blur-sm text-white px-2 py-1 rounded-full">Javascript</span>
-              </div>
-            </div>             
-            <a href="https://www.pcshop.gr/">                
-              <Button class="mt-2 bg-offload-black hover:bg-pink-600 text-white font-medium text-sm py-1.5 px-3 rounded-lg transition shadow-sm">Visit Website</Button>             
-            </a>           
-          </div>         
-        </div>
-        <!-- What I Use Daily (under Profile Card) -->
-        <div class="bg-offload-black rounded-3xl p-6 flex flex-col items-center justify-center row-span-1 md:row-span-2 md:col-span-3 h-full border-[2px] border-[#3D3D3D59] shadow-lg">
-          <h3 class="font-bold mb-2">What I use daily</h3>
-          <div class="flex gap-4 flex-wrap justify-center">
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="Nuxt.js">
-              <Icon name="logos:nuxt-icon" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="Vue.js">
-              <Icon name="logos:vue" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="Node.js">
-              <Icon name="logos:nodejs-icon" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="PHP">
-              <Icon name="logos:php" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="PHP">
-              <Icon name="material-icon-theme:javascript" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="HTML5">
-              <Icon name="logos:html-5" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="CSS3">
-              <Icon name="logos:css-3" class="w-10 h-10" />
-            </a>
-            <a href="#" class="hover:text-pink-500 px-2 py-2 bg-[#212121] rounded-xl flex items-center justify-center" title="Odoo">
-              <Icon name="simple-icons:odoo" class="w-10 h-10" />
-            </a>
+          <div class="mt-auto">
+            <h3 class="text-[0.9375rem] text-pf-muted">Languages</h3>
+            <ul class="mt-2 flex flex-wrap gap-2">
+              <li v-for="l in education.languages" :key="l.name" class="pf-chip">
+                {{ l.name }}<span class="ml-1.5 text-pf-muted">{{ l.level }}</span>
+              </li>
+            </ul>
           </div>
-        </div>
+        </section>
+
+        <!-- Contact -->
+        <section
+          aria-labelledby="contact-title"
+          class="pf-card pf-reveal flex flex-col justify-between gap-6 md:col-span-6 lg:col-span-8"
+          style="--i: 6"
+        >
+          <div>
+            <h2 id="contact-title" class="pf-title">Have a website or an integration in mind?</h2>
+            <p class="mt-2 max-w-[60ch] text-pf-muted">
+              Write to me in English or Greek. Freelance projects, full-time roles and integration work are all welcome.
+            </p>
+          </div>
+          <a
+            :href="`mailto:${profile.email}`"
+            class="pf-focus block min-h-[2.75rem] max-w-full break-all rounded py-1 font-display font-semibold tracking-tight text-pf-accent underline decoration-transparent underline-offset-[0.2em] transition-colors hover:decoration-pf-accent sm:break-normal"
+            style="font-size: clamp(1.25rem, 0.9rem + 1.6vw, 2.125rem)"
+          >{{ profile.email }}</a>
+          <ul class="flex flex-wrap gap-2">
+            <li>
+              <a :href="profile.phoneHref" class="pf-btn-ghost">
+                <Phone class="size-4" aria-hidden="true" />
+                {{ profile.phone }}
+              </a>
+            </li>
+            <li v-for="link in profile.links" :key="link.href">
+              <a :href="link.href" target="_blank" rel="noopener" class="pf-btn-ghost">
+                <component :is="iconFor(link.icon)" class="size-4" aria-hidden="true" />
+                {{ link.label }}
+                <span class="sr-only">(opens in a new tab)</span>
+              </a>
+            </li>
+            <li>
+              <a :href="profile.cv" download class="pf-btn-ghost">
+                <Download class="size-4" aria-hidden="true" />
+                Download CV
+                <span class="sr-only">(PDF)</span>
+              </a>
+            </li>
+          </ul>
+        </section>
       </div>
-    </div>
+    </main>
+
+    <footer class="mx-auto flex w-[min(100%_-_2rem,80rem)] flex-wrap items-center justify-between gap-2 border-t border-pf-line py-6 text-[0.8125rem] text-pf-muted">
+      <p>© {{ year }} Petros Filippou</p>
+      <p class="inline-flex items-center gap-1.5">
+        <MapPin class="size-3.5" aria-hidden="true" />
+        {{ profile.location }}
+      </p>
+    </footer>
   </div>
 </template>
+
 <script setup lang="ts">
-import Card from '~/components/ui/card/Card.vue';
+import { ArrowUpRight, Download, Github, Linkedin, Mail, MapPin, Phone } from 'lucide-vue-next'
+import { profile, currentRole, experience, skills, education } from '~/data/cv'
+import harisfish from '~/assets/projects/harisfish.webp'
+import karemfillis from '~/assets/projects/karemfillis.webp'
+import netconnect from '~/assets/projects/netconnect.webp'
+import pcshop from '~/assets/projects/pcshop.webp'
 
+const year = new Date().getFullYear()
 
+const iconFor = (name: string) => (name === 'github' ? Github : Linkedin)
+
+const projects = [
+  {
+    name: 'Haris Fish',
+    description: 'Online shop for fresh fish and Greek products, with a mobile ordering flow and checkout.',
+    stack: ['Vue.js', 'Nuxt.js', 'Tailwind', 'shadcn-vue'],
+    image: harisfish,
+    note: 'Built at Offload Studio',
+  },
+  {
+    name: 'Karemfillis Olives',
+    description: 'Brand site and shop for a family olive producer in Chalkidiki, built around their story and products.',
+    stack: ['WordPress', 'PHP'],
+    image: karemfillis,
+    href: 'https://karemfillisolives.com/',
+  },
+  {
+    name: 'NetConnect',
+    description: 'Corporate site for a networking solutions provider, with custom service pages and contact flows.',
+    stack: ['OpenCart', 'PHP', 'JavaScript'],
+    image: netconnect,
+    href: 'https://www.netconnect.gr/',
+  },
+  {
+    name: 'PCShop',
+    description: 'Online store for a local computer shop, with product catalogue, ordering and an admin dashboard.',
+    stack: ['OpenCart', 'PHP', 'JavaScript'],
+    image: pcshop,
+    href: 'https://www.pcshop.gr/',
+  },
+]
+
+const description =
+  'Petros Filippou, Full Stack Developer in Thessaloniki. Websites and e-commerce with Vue.js, Nuxt, WordPress and OpenCart, plus solar park SCADA integration.'
 
 useHead({
-    title: 'Petros Filippou | Full Stack Developer',
-    meta: [
-      { name: 'description', content: 'Petros Filippou is a Full Stack Developer specializing in web development and design.' },
-      { name: 'keywords', content: 'design, web development, branding, custom websites, Offload Studio,no code websites,ui design,ux design,seo optimization,website speed optimization' },
-      { name: 'robots', content: 'index, follow' },
-      { property: 'og:title', content: 'Petros Filippou | Full Stack Developer' },
-      { property: 'og:description', content: 'Petros Filippou is a Full Stack Developer specializing in web development and design.' },
-      { property: 'og:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' },
-      { property: 'og:url', content: 'https://offload.studio/' },
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: 'Petros Filippou | Full Stack Developer' },
-      { name: 'twitter:description', content: 'Petros Filippou is a Full Stack Developer specializing in web development and design.' },
-      { name: 'twitter:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' }
-    ],
-  });
+  htmlAttrs: { lang: 'en' },
+  title: 'Petros Filippou | Full Stack Developer',
+  meta: [
+    { name: 'description', content: description },
+    { name: 'robots', content: 'index, follow' },
+    { property: 'og:title', content: 'Petros Filippou | Full Stack Developer' },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' },
+    { property: 'og:url', content: 'https://offload.studio/' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Petros Filippou | Full Stack Developer' },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: 'https://offload.studio/_nuxt/LogoNav.208eZWZG.svg' },
+  ],
+})
 </script>
