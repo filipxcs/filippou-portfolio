@@ -49,16 +49,7 @@ module.exports = {
           'hero-accent': 'rgb(var(--pf-hero-accent) / <alpha-value>)',
           live: 'rgb(var(--pf-live) / <alpha-value>)',
         },
-        // Custom Colors
-        'offload-black': '#181818', // Custom gray color
-        'offload-yellow': '#FFE500', // Custom gray color
-        'offload-pink': '#EC297B', // Custom gray color,
-        'offload-body': '#0D0D0D',
-        'offload-blue': '#0059FF',
-        'offload-gray': '#4E4E4E',
-        'offload-gray-white': '#7C7C7C',
-        'offload-gray-black': '#D0D0D0',
-        // Existing Colors
+        // shadcn tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))", // Default ring color

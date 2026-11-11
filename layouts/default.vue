@@ -1,8 +1,5 @@
-<script setup lang="ts">
-</script>
-
 <template>
-    <div class="bg-offload-body">
-      <slot />
-    </div>
+  <div class="bg-pf-bg">
+    <slot />
+  </div>
 </template>
