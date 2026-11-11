@@ -1,75 +1,41 @@
-# Nuxt 3 Minimal Starter
+# Petros Filippou — Portfolio
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Personal portfolio / CV site built with Nuxt 3, deployed to Cloudflare Pages (`filippou-portfolio`).
+
+This project uses [bun](https://bun.sh). Do not use npm, npx, yarn or pnpm.
 
 ## Setup
 
-Make sure to install the dependencies:
-
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
 bun install
 ```
 
-## Development Server
+## Development
 
-Start the development server on `http://localhost:3000`:
+Start the dev server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
 bun run dev
 ```
 
 ## Production
 
-Build the application for production:
+Build for production (Nitro `cloudflare-pages` preset, output in `dist/`):
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
 bun run build
 ```
 
-Locally preview production build:
+Preview the production build locally:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
 bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Deploy
+
+The Cloudflare Pages project has no Git integration (direct upload), so merging to `main` does not deploy. After building:
+
+```bash
+bunx wrangler pages deploy dist --project-name filippou-portfolio --branch main --commit-hash <commit sha>
+```

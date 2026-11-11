@@ -1,5 +1,4 @@
-
 User-agent: *
 Disallow:
 
-Sitemap: https://localhost:1337/sitemap.xml
+# Sitemap is added by @nuxtjs/robots from site.url in nuxt.config.ts

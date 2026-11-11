@@ -26,18 +26,30 @@ module.exports = {
         bulevar: ['Bulevar', 'sans-serif'],
         caveat: ['Caveat', 'cursive'],
         roboto: ['Roboto', 'roboto'],
+        // Portfolio v2: display + body pair
+        display: ['Safiro Display', 'Safiro', 'system-ui', 'sans-serif'],
+        body: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
       },
       colors: {
-        // Custom Colors
-        'offload-black': '#181818', // Custom gray color
-        'offload-yellow': '#FFE500', // Custom gray color
-        'offload-pink': '#EC297B', // Custom gray color,
-        'offload-body': '#0D0D0D',
-        'offload-blue': '#0059FF',
-        'offload-gray': '#4E4E4E',
-        'offload-gray-white': '#7C7C7C',
-        'offload-gray-black': '#D0D0D0',
-        // Existing Colors
+        // Portfolio v2 tokens (see DESIGN.md)
+        pf: {
+          bg: 'rgb(var(--pf-bg) / <alpha-value>)',
+          surface: 'rgb(var(--pf-surface) / <alpha-value>)',
+          raised: 'rgb(var(--pf-raised) / <alpha-value>)',
+          line: 'rgb(var(--pf-line) / <alpha-value>)',
+          text: 'rgb(var(--pf-text) / <alpha-value>)',
+          muted: 'rgb(var(--pf-muted) / <alpha-value>)',
+          accent: 'rgb(var(--pf-accent) / <alpha-value>)',
+          cta: 'rgb(var(--pf-cta) / <alpha-value>)',
+          'on-cta': 'rgb(var(--pf-on-cta) / <alpha-value>)',
+          hero: 'rgb(var(--pf-hero) / <alpha-value>)',
+          'hero-text': 'rgb(var(--pf-hero-text) / <alpha-value>)',
+          'hero-muted': 'rgb(var(--pf-hero-muted) / <alpha-value>)',
+          'hero-line': 'rgb(var(--pf-hero-line) / <alpha-value>)',
+          'hero-accent': 'rgb(var(--pf-hero-accent) / <alpha-value>)',
+          live: 'rgb(var(--pf-live) / <alpha-value>)',
+        },
+        // shadcn tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))", // Default ring color
@@ -73,6 +85,8 @@ module.exports = {
         },
       },
       borderRadius: {
+        card: '1.75rem',
+        tile: '1.125rem',
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
