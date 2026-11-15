@@ -21,7 +21,14 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'cloudflare-pages',
-
+    // Render the home page once at build time. It then ships as dist/index.html and is excluded
+    // from dist/_routes.json, so Cloudflare serves it as a static asset without starting the
+    // Worker. Rendering "/" in the Worker on every request used to exceed the Workers Free
+    // 10 ms CPU limit (Error 1102).
+    prerender: {
+      routes: ['/'],
+      crawlLinks: false,
+    },
   },
   site: {
     url: siteUrl,
@@ -74,6 +81,13 @@ export default defineNuxtConfig({
       xl: 1280,
       xxl: 1536,
     }
+  },
+
+  // The share image is the static public/og-image.png (see scripts/build-og-image.mjs). Turn off the
+  // runtime og-image generator: it bundles a 2.5 MB resvg wasm into the Worker that slows every
+  // cold start and is never used.
+  ogImage: {
+    enabled: false,
   },
 
   schemaOrg: {
